@@ -4,21 +4,20 @@ function setup() {
   createCanvas(800, 600);
   qtdCP = 2;//qtd of controll points
   cPoints = [];
-  c = new Rect();
   for(var i=0 ; i<qtdCP ; i++) {
     cPoints.push(new ControllPoint(width*(i/(qtdCP+1))+width/(qtdCP+1), height/2));
   }
- 
- 
-  ///
-  //print("evaluate: " + new Rect().parameters(1))
+  c = new Rect(cPoints);
 }
  
 function draw() {
-  updateCPoints();
-  drawCPoints();
+  strokeWeight(15);
+  fill(255);
+  rect(0, 0, width, height);
+  updateCPoints(c);
+  c.drawCPoints();
   c.parameters(cPoints);
-  showFunction();
+  c.showCurve();
 }
  
  
@@ -39,39 +38,10 @@ function ControllPoint(pX, pY) {
     }
   }
 }
- 
-function drawCPoints() {
-  strokeWeight(15);
-  fill(255);
-  rect(0, 0, width, height);
-  strokeWeight(2);
-  fill(0);
-  for(var i=0 ; i<qtdCP ; i++) {
-    cPoints[i].show();
-  }
-}
- 
-function updateCPoints() {
-  for(var i=0 ; i<qtdCP ; i++) {
-    cPoints[i].update();
-  }
-}
- 
-function colisionVerification() {
-  for(var i=0 ; i<qtdCP ; i++) {
-      if(sqrt(sq(mouseX-cPoints[i].x) + sq(mouseY-cPoints[i].y)) < ControllPoint.radius) {
-          cPoints[i].selected = true;
-      }
-  }
-}
- 
-function releaseAll() {
-  for(var i=0 ; i<qtdCP ; i++) {
-    cPoints[i].selected = false;
-  }
-}
- 
-function CurveI() {
+
+CurveI.onlyPoints = true;
+function CurveI(cps) {
+    this.cPoints = cps;
     this.parameters = function(cps) {
         //Uses the controllPoints to fit the curve
         print("Implement parameters function to this type of curve");//pseudo abstract method
@@ -83,13 +53,39 @@ function CurveI() {
         print("Implement evaluate function to this type of curve");//pseudo abstract method
         return null;
     }
+    
+    this.showCurve = function() {
+      if(CurveI.onlyPoints) {
+        strokeWeight(1);
+        for(var i=0 ; i<width ; i++) {
+            point(i, this.evaluate(i));
+        }
+      }else {
+        var f0, f1;
+        f0 = this.evaluate(0);
+        for(var i=1 ; i<width ; i++) {
+          f1 = this.evaluate(i);
+          line(i-1, f0, i, f1);
+          f0 = f1;
+        }
+      }
+    }
+    
+    this.drawCPoints = function() {
+      strokeWeight(2);
+      fill(0);
+      for(var i=0 ; i<this.cPoints.length ; i++) {
+        this.cPoints[i].show();
+      }
+    }
 }
  
 Rect.prototype = new CurveI();
 //Uses 2 points
-function Rect() {
+function Rect(cps) {
     this.a = 0;
     this.b = 0;
+    this.cPoints = cps;
     this.parameters = function(cps) {
         //TODO fazer maps
         var x1, x2, y1, y2;
@@ -129,19 +125,31 @@ function Parable() {
         return this.a * sq(x) + this.b * x + c;
     }
 }
- 
-function showFunction() {
-    for(var i=0 ; i<width ; i++) {
-        strokeWeight(1);
-        point(i, c.evaluate(i));
-    }
+
+function updateCPoints(c) {
+  for(var i=0 ; i<c.cPoints.length ; i++) {
+    c.cPoints[i].update();
+  }
 }
  
+function colisionVerification() {
+  for(var i=0 ; i<qtdCP ; i++) {
+      if(sqrt(sq(mouseX-cPoints[i].x) + sq(mouseY-cPoints[i].y)) < ControllPoint.radius) {
+          cPoints[i].selected = true;
+      }
+  }
+}
+ 
+function releaseAll() {
+  for(var i=0 ; i<qtdCP ; i++) {
+    cPoints[i].selected = false;
+  }
+}
  
 function mousePressed() {
-  colisionVerification();
+  colisionVerification(c);
 }
  
 function mouseReleased() {
-  releaseAll();
+  releaseAll(c);
 }
