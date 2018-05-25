@@ -1,6 +1,14 @@
 var cPoints, qtdCP, curves;
 
+var cores;
+
 function setup() {
+  cores = [];
+  for(var i=0 ; i<20 ; i++) {
+    var cor = [random(0, 255), random(0, 255), random(0, 255)]
+    cores.push(cor);
+  }
+  
   createCanvas(800, 600);
   frameRate(30);
   //array of curves
@@ -18,9 +26,9 @@ function setup() {
 function draw() {
   background(255);
   strokeWeight(15);
+  stroke(0);
   noFill();
   rect(0, 0, width, height);
-  
   for (var i=0; i< curves.length; i++) {
     curves[i].updateCPoints();
     curves[i].drawCPoints();
