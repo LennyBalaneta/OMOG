@@ -23,10 +23,10 @@ function BSpline(cps) {
   }
 
   this.generateT = function() {
-    var uniform = false;
+    var periodic = false;
     var ts = [];
 
-    if (uniform) {
+    if (periodic) {
       var m = this.n-this.k+2;
       var tot = this.n+this.k+1;
       for (var i=0; i<=this.n+this.k+1; i++) {
@@ -34,9 +34,9 @@ function BSpline(cps) {
       }
     } else {
       for (var i=0; i<=this.n+this.k+1; i++) {
-        if (i < this.k) {
+        if (i <= this.k) {
           ts.push(0);
-        } else if (i <= this.n) {
+        } else if (i < this.n) {
           ts.push(i - this.k + 1);
         } else {
           ts.push(this.n - this.k + 2);
@@ -48,24 +48,24 @@ function BSpline(cps) {
   }
   this.t = this.generateT();
 
-  this.getN = function(i, j, u) {
-    if (j == 0) {//sei la 0 ou 1
+  this.getN = function(i, k, u) {
+    if (k == 1) {//sei la 0 ou 1
       if (this.t[i] <= u && u <= this.t[i+1]) {
-        return 1;
+        return 1.0;
       } else {
-        return 0;
+        return 0.0;
       }
     }
 
     //k > 1
-    var t1 = ((u-this.t[i])) * this.getN(i, j-1, u);
-    var dt1 = (this.t[i+j]-this.t[i]);
+    var t1 = ((u-this.t[i])) * this.getN(i, k-1, u);
+    var dt1 = (this.t[i+k-1]-this.t[i]);
     if (dt1 == 0) {
       dt1 = 1;
       t1 = 0;
     }
-    var t2 = ((this.t[i+j+1] - u)) * this.getN(i+1, j-1, u);
-    var dt2 = (this.t[i+j+1] - this.t[i+1]);
+    var t2 = ((this.t[i+k] - u)) * this.getN(i+1, k-1, u);
+    var dt2 = (this.t[i+k] - this.t[i+1]);
     if (dt2 == 0) {
       dt2 = 1;
       t2 = 0;
