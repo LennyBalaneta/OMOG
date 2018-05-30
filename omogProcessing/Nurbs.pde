@@ -1,9 +1,9 @@
-class BSpline extends CurveI {
+class Nurbs extends CurveI {
   ControllPoint[] cPoints;
   int k, n;
   FloatList t;
 
-  BSpline(ControllPoint[] cps, int k) {
+  Nurbs(ControllPoint[] cps, int k) {
     super(cps);
     this.cPoints = cps;
     this.k = k;
@@ -73,17 +73,44 @@ class BSpline extends CurveI {
   }
 
   float getX(float u) {
-    float valX = 0;
+    float valX = 0, denValX = 0;
     for (int i=0; i<this.cPoints.length; i++) {
-      valX += this.getN(i, this.k, u) * cPoints[i].x;
+      float baseFunc = this.getN(i, this.k, u);
+      valX += baseFunc * cPoints[i].x * cPoints[i].weight;
+      denValX += baseFunc * cPoints[i].weight;
     }
-    return valX;
+    return valX/denValX;
   }
   float getY(float u) {
-    float valY = 0;
+    float valY = 0, denValY = 0;
     for (int i=0; i<this.cPoints.length; i++) {
-      valY += this.getN(i, this.k, u) * cPoints[i].y;
+      float baseFunc = this.getN(i, this.k, u);
+      valY += baseFunc * cPoints[i].y * cPoints[i].weight;
+      denValY += baseFunc * cPoints[i].weight;
     }
-    return valY;
+    return valY/denValY;
+  }
+
+  void drawCPoints() {
+    strokeWeight(2);
+    fill(0);
+    //Points
+    for (int i=0; i<this.cPoints.length; i++) {
+      this.cPoints[i].show();
+    }
+    
+    //Weights
+    for (int i=0; i<this.cPoints.length; i++) {
+      textSize(12);
+      fill(0);
+      text("CP"+i, 10+50*i, 10);
+      ellipse(20+50*i, 25, 20, 20);
+      text(nf(this.cPoints[i].weight, 0, 2), 10+50*i, 50);
+      ellipse(20+50*i, 65, 20, 20);
+      fill(255);
+      textSize(20);
+      text("+", 12+50*i, 30);
+      text("-", 15+50*i, 70);
+    }
   }
 }
