@@ -21,12 +21,12 @@ class ControllPoint {
       this.x = mouseX;
       this.y = mouseY;
     }
-    if(this.selectedPlus == true) {
+    if (this.selectedPlus == true) {
       this.weight += 0.2;
     }
-    if(this.selectedMinus == true) {
+    if (this.selectedMinus == true) {
       this.weight -= 0.2;
-      if(this.weight < 0) {
+      if (this.weight < 0) {
         this.weight = 0.0;
       }
     }

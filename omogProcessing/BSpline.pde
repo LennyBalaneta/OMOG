@@ -2,6 +2,7 @@ class BSpline extends CurveI {
   ControllPoint[] cPoints;
   int k, n;
   FloatList t;
+  color curveColor;
 
   BSpline(ControllPoint[] cps, int k) {
     super(cps);
@@ -9,12 +10,13 @@ class BSpline extends CurveI {
     this.k = k;
     this.n = this.cPoints.length - 1;
     this.t = this.generateT();
+    this.curveColor = color(6, 10, 121);
   }
 
   void showCurve() {
     strokeWeight(2);
-    for (float u=0; u<=this.n-this.k+2; u+=0.001) {
-      stroke(0);
+    stroke(this.curveColor);
+    for (float u=0; u<=this.n-this.k+2; u+=this.increment) {
       float x = this.getX(u);
       float y = this.getY(u);
       point(x, y);
@@ -42,7 +44,7 @@ class BSpline extends CurveI {
         }
       }
     }
-    print("knots: " + ts);
+    println("Knots BSpline: " + ts);
     return ts;
   }
 

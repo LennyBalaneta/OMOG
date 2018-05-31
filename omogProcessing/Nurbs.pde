@@ -2,6 +2,7 @@ class Nurbs extends CurveI {
   ControllPoint[] cPoints;
   int k, n;
   FloatList t;
+  color curveColor;
 
   Nurbs(ControllPoint[] cps, int k) {
     super(cps);
@@ -9,12 +10,13 @@ class Nurbs extends CurveI {
     this.k = k;
     this.n = this.cPoints.length - 1;
     this.t = this.generateT();
+    this.curveColor = color(3, 116, 29);
   }
 
   void showCurve() {
     strokeWeight(2);
-    for (float u=0; u<=this.n-this.k+2; u+=0.001) {
-      stroke(0);
+    stroke(this.curveColor);
+    for (float u=0; u<=this.n-this.k+2; u+=this.increment) {
       float x = this.getX(u);
       float y = this.getY(u);
       point(x, y);
@@ -42,7 +44,7 @@ class Nurbs extends CurveI {
         }
       }
     }
-    print("knots: " + ts);
+    println("Knots Nurbs: " + ts);
     return ts;
   }
 
@@ -98,7 +100,7 @@ class Nurbs extends CurveI {
     for (int i=0; i<this.cPoints.length; i++) {
       this.cPoints[i].show();
     }
-    
+
     //Weights
     for (int i=0; i<this.cPoints.length; i++) {
       textSize(12);

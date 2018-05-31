@@ -1,9 +1,11 @@
 class CurveI {
   boolean onlyPoints = true;
+  float increment;
   ControllPoint[] cPoints;
 
   CurveI(ControllPoint[] cps) {
     this.cPoints = cps;
+    this.increment = 0.005;
   }
 
   void drawCPoints() {
