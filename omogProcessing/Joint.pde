@@ -19,9 +19,13 @@ static class Joint {
     float dC2 = curve2.derivativePos(0, 0.2);
     println("Curve 1 derivative:"+dC1);
     println("Curve 2 initial derivative:"+dC2);
+    
+    //TODO improve the brute force method
     float yOld = curve2.cPoints[1].y;
-    curve2.cPoints[1].y = 0;
-    while(abs(dC1 - dC2) > c1MaxError) {//TODO improve the brute force method
+    if(abs(dC1 - dC2) > c1MaxError) {
+      curve2.cPoints[1].y = 0;
+    }
+    while(abs(dC1 - dC2) > c1MaxError) {
       curve2.cPoints[1].y += 1;
       dC2 = curve2.derivativePos(0, 0.2);
       if(curve2.cPoints[1].y > 1000) {
