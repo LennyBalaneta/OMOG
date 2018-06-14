@@ -1,10 +1,14 @@
 ControllPoint[] cPoints;
 int qtdCP;
 CurveI[] curves;
+boolean showTangents;
 
 void setup() {
   size(800, 600);
   frameRate(30);
+  
+  showTangents = false;
+  
   //array of curves
   curves = new CurveI[2];
 
@@ -34,6 +38,14 @@ void draw() {
     curves[i].drawCPoints();
   }
   showJointButtons();
+  if(showTangents) {//show derivative at junction points
+    //B-spline
+    stroke(curves[0].getColor());
+    curves[0].showDerivativeLastPoint();
+    //Nurbs
+    stroke(curves[1].getColor());
+    curves[1].showDerivativeFirstPoint();
+  }
 }
 
 void colisionVerification(CurveI c) {
@@ -74,11 +86,13 @@ void showJointButtons() {
   ellipse(30, 570, 40, 40);//c0
   ellipse(80, 570, 40, 40);//c1
   ellipse(130, 570, 40, 40);//c2
+  ellipse(180, 570, 40, 40);//t
 
   fill(0);
   text("c0", 20, 576);
   text("c1", 70, 576);
   text("c2", 120, 576);
+  text("t", 176, 576);
 }
 
 void mousePressed() {
@@ -114,5 +128,8 @@ void mouseReleased() {
   }
   if (sqrt(sq(mouseX-(130)) + sq(mouseY-570)) < 20) {//c2
     Joint.c2(curves[0], curves[1]);
+  }
+  if (sqrt(sq(mouseX-(180)) + sq(mouseY-570)) < 20) {//t
+    showTangents = !showTangents;
   }
 }

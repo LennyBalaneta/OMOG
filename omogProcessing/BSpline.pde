@@ -3,7 +3,6 @@ class BSpline extends CurveI {
   int k, n;
   FloatList t;
   color curveColor;
-
   BSpline(ControllPoint[] cps, int k) {
     super(cps);
     this.cPoints = cps;
@@ -11,6 +10,10 @@ class BSpline extends CurveI {
     this.n = this.cPoints.length - 1;
     this.t = this.generateT();
     this.curveColor = color(6, 10, 121);
+  }
+
+  color getColor() {
+    return this.curveColor;
   }
 
   void showCurve() {
@@ -21,7 +24,6 @@ class BSpline extends CurveI {
       float y = this.getY(u);
       point(x, y);
     }
-    this.showDerivate();
   }
 
   FloatList generateT() {
@@ -88,15 +90,5 @@ class BSpline extends CurveI {
       valY += this.getN(i, this.k, u) * cPoints[i].y;
     }
     return valY;
-  }
-  
-  void showDerivate() {
-    float a = Joint.derivatePre(this, float(this.n-this.k+2), 0.2);
-    float x = this.getX(float(this.n-this.k+2));
-    float y = this.getY(float(this.n-this.k+2));
-    println("x:"+x+" | y:"+y);
-    float b = y - a*x;
-    line(0, 0*a + b, width, width*a + b);
-    println("a:"+a+" | b:"+b);
   }
 }

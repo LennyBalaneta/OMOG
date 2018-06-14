@@ -13,6 +13,10 @@ class Nurbs extends CurveI {
     this.curveColor = color(3, 116, 29);
   }
 
+  color getColor() {
+    return this.curveColor;
+  }
+
   void showCurve() {
     strokeWeight(2);
     stroke(this.curveColor);

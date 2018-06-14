@@ -2,7 +2,9 @@ class CurveI {
   boolean onlyPoints = true;
   float increment;
   ControllPoint[] cPoints;
-
+  int n, k;
+  color curveColor;
+  
   CurveI(ControllPoint[] cps) {
     this.cPoints = cps;
     this.increment = 0.005;
@@ -31,5 +33,39 @@ class CurveI {
   
   float getY(float u) {
     return -1;
+  }
+  
+  float derivativePre(float u, float h) {
+    //Numerical derivation using 3 points before x0
+    float dx = 1/(2*h) * (this.getX(u - 2*h) - 4*this.getX(u-h) + 3*this.getX(u));
+    float dy = 1/(2*h) * (this.getY(u - 2*h) - 4*this.getY(u-h) + 3*this.getY(u));
+    return dy/dx;
+  }
+  
+  float derivativePos(float u, float h) {
+    //Numerical derivation using 3 points after x0
+    float dx = 1/(2*h) * (-3*this.getX(u) + 4*this.getX(u+h) - this.getX(u+2*h));
+    float dy = 1/(2*h) * (-3*this.getY(u) + 4*this.getY(u+h) - this.getY(u+2*h));
+    return dy/dx;
+  }
+  
+ void showDerivativeLastPoint() {
+    float a = this.derivativePre(float(this.n-this.k+2), 0.2);
+    float x = this.getX(float(this.n-this.k+2));
+    float y = this.getY(float(this.n-this.k+2));
+    float b = y - a*x;
+    line(0, 0*a + b, width, width*a + b);
+  }
+  
+   void showDerivativeFirstPoint() {
+    float a = this.derivativePos(0, 0.2);
+    float x = this.getX(0);
+    float y = this.getY(0);
+    float b = y - a*x;
+    line(0, 0*a + b, width, width*a + b);
+  }
+  
+  color getColor() {
+    return this.curveColor;
   }
 }
