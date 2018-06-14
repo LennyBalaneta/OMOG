@@ -35,6 +35,10 @@ class CurveI {
     return -1;
   }
   
+  color getColor() {
+    return this.curveColor;
+  }
+  
   float derivativePre(float u, float h) {
     //Numerical derivation using 3 points before x0
     float dx = 1/(2*h) * (this.getX(u - 2*h) - 4*this.getX(u-h) + 3*this.getX(u));
@@ -65,7 +69,24 @@ class CurveI {
     line(0, 0*a + b, width, width*a + b);
   }
   
-  color getColor() {
-    return this.curveColor;
+  float secondDerivativePre(float u, float h) {
+    //Numerical second derivation
+    float dx = (2*this.getX(u) + this.getX(u-h))/sq(h);
+    float dy = (2*this.getY(u) + this.getY(u-h))/sq(h);
+    return dy/dx;
+  }
+  
+  float secondDerivativePos(float u, float h) {
+    //Numerical second derivation
+    float dx = (this.getX(u+h) - 2*this.getX(u))/sq(h);
+    float dy = (this.getY(u+h) - 2*this.getY(u))/sq(h);
+    return dy/dx;
+  }
+  
+  float secondDerivative(float u, float h) {
+    //Numerical second derivation
+    float dx = (this.getX(u+h) - 2*this.getX(u) + this.getX(u-h))/sq(h);
+    float dy = (this.getY(u+h) - 2*this.getY(u) + this.getY(u-h))/sq(h);
+    return dy/dx;
   }
 }

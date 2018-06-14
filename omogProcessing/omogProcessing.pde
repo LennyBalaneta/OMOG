@@ -36,6 +36,7 @@ void draw() {
     curves[i].showCurve();
     curves[i].updateCPoints();
     curves[i].drawCPoints();
+    //c2P(curves[0], curves[1]);//TODO remover
   }
   showJointButtons();
   if(showTangents) {//show derivative at junction points
@@ -121,15 +122,22 @@ void mouseReleased() {
   }
   //joint buttons
   if (sqrt(sq(mouseX-(30)) + sq(mouseY-570)) < 20) {//c0
-    Joint.c0(curves[0], curves[1]);
+    c0(curves[0], curves[1]);
   }
   if (sqrt(sq(mouseX-(80)) + sq(mouseY-570)) < 20) {//c1
-    Joint.c1(curves[0], curves[1]);
+    c1(curves[0], curves[1]);
   }
   if (sqrt(sq(mouseX-(130)) + sq(mouseY-570)) < 20) {//c2
-    Joint.c2(curves[0], curves[1]);
+    c2(curves[0], curves[1]);
   }
   if (sqrt(sq(mouseX-(180)) + sq(mouseY-570)) < 20) {//t
     showTangents = !showTangents;
   }
+}
+
+void c2P(CurveI curve1, CurveI curve2) {
+  println("-----Start c2-----");
+  println("Curve 1 second derivative:"+curve1.secondDerivative(float(curve1.n-curve1.k+2)-0.1, 0.1));
+  println("Curve 2 second derivative:"+curve2.secondDerivative(0+0.1, 0.1));
+  println("-----Finish c2-----");
 }
