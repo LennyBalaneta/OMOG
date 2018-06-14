@@ -24,4 +24,12 @@ class CurveI {
 
   void showCurve() {
   }
+  
+  float getX(float u) {
+    return -1;
+  }
+  
+  float getY(float u) {
+    return -1;
+  }
 }

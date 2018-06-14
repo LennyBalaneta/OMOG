@@ -18,4 +18,12 @@ static class Joint {
     Joint.c1(curve1, curve2);
     println("c2");
   }
+  
+  static float derivatePre(CurveI curve, float u, float h) {
+    //Numerical derivation using 3 points before x0
+    //x0 -> u
+    float dx = 1/(2*h) * (curve.getX(u - 2*h) - 4*curve.getX(u-h) + 3*curve.getX(u));
+    float dy = 1/(2*h) * (curve.getY(u - 2*h) - 4*curve.getY(u-h) + 3*curve.getY(u));
+    return dy/dx;
+  }
 }
