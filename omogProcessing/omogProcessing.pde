@@ -6,9 +6,9 @@ boolean showTangents;
 void setup() {
   size(800, 600);
   frameRate(30);
-  
+
   showTangents = false;
-  
+
   //array of curves
   curves = new CurveI[2];
 
@@ -36,10 +36,9 @@ void draw() {
     curves[i].showCurve();
     curves[i].updateCPoints();
     curves[i].drawCPoints();
-    //c2P(curves[0], curves[1]);//TODO remover
   }
   showJointButtons();
-  if(showTangents) {//show derivative at junction points
+  if (showTangents) {//show derivative at junction points
     //B-spline
     stroke(curves[0].getColor());
     curves[0].showDerivativeLastPoint();
@@ -133,11 +132,4 @@ void mouseReleased() {
   if (sqrt(sq(mouseX-(180)) + sq(mouseY-570)) < 20) {//t
     showTangents = !showTangents;
   }
-}
-
-void c2P(CurveI curve1, CurveI curve2) {
-  println("-----Start c2-----");
-  println("Curve 1 second derivative:"+curve1.secondDerivative(float(curve1.n-curve1.k+2)-0.1, 0.1));
-  println("Curve 2 second derivative:"+curve2.secondDerivative(0+0.1, 0.1));
-  println("-----Finish c2-----");
 }
