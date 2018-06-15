@@ -69,24 +69,10 @@ class CurveI {
     line(0, 0*a + b, width, width*a + b);
   }
 
-  float secondDerivativePre(float u, float h) {
-    //Numerical second derivation
-    float dx = (2*this.getX(u) + this.getX(u-h))/sq(h);
-    float dy = (2*this.getY(u) + this.getY(u-h))/sq(h);
-    return dy/dx;
-  }
-
-  float secondDerivativePos(float u, float h) {
-    //Numerical second derivation
-    float dx = (this.getX(u+h) - 2*this.getX(u))/sq(h);
-    float dy = (this.getY(u+h) - 2*this.getY(u))/sq(h);
-    return dy/dx;
-  }
-
   float secondDerivative(float u, float h) {
     //Numerical second derivation
     float dx = (this.getX(u+h) - 2*this.getX(u) + this.getX(u-h))/sq(h);
     float dy = (this.getY(u+h) - 2*this.getY(u) + this.getY(u-h))/sq(h);
-    return dy/dx;
+    return (dy/dx);
   }
 }
