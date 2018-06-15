@@ -1,7 +1,7 @@
 float c1MaxError = 0.2;
-float c1IMaxError = 0.2;
+float c1IMaxError = 0.5;
 float c2MaxError = 0.5;
-float globalH = 0.001;
+float globalH = 0.1;
 
 void c0(CurveI curve1, CurveI curve2) {
   println("-----Start c0-----");
@@ -51,11 +51,11 @@ void c1(CurveI curve1, CurveI curve2) {
   println("Curve 2 final first derivative:"+dC2);
   println("g1 achieved");
   //g1 achieved
-  float intensityV1 = sqrt(sq(curve1.cPoints[curve1.cPoints.length-1].x-curve1.cPoints[curve1.cPoints.length-2].x)//
-  + sq(curve1.cPoints[curve1.cPoints.length-1].y-curve1.cPoints[curve1.cPoints.length-2].y));
+  float intensityV1 = sqrt(sq(curve1.getX(curve1.n-curve1.k+2) - curve1.getX(curve1.n-curve1.k+2-globalH))//
+  + sq(curve1.getY(curve1.n-curve1.k+2) - curve1.getY(curve1.n-curve1.k+2-globalH)));
   
-  float intensityV2 = sqrt(sq(curve2.cPoints[0].x-curve2.cPoints[1].x)//
-  + sq(curve2.cPoints[0].y-curve2.cPoints[1].y));
+  float intensityV2 = sqrt(sq(curve2.getX(0) - curve2.getX(0+globalH))//
+  + sq(curve2.getY(0) - curve2.getY(0+globalH)));
   
   float distV1V2 = sqrt(sq(curve1.cPoints[curve1.cPoints.length-2].x-curve2.cPoints[1].x)//
   + sq(curve1.cPoints[curve1.cPoints.length-2].y-curve2.cPoints[1].y));
@@ -64,9 +64,13 @@ void c1(CurveI curve1, CurveI curve2) {
   
   //Find the equation of the line
   float a = dC2;
-  float x = curve2.getX(0);
-  float y = curve2.getY(0);
+  float x = curve2.cPoints[1].x;
+  float y = curve2.cPoints[1].y;
   float b = y - a*x;
+  stroke(255, 0, 0);
+  strokeWeight(10);
+  //line(0, 0*a + b, width, width*a + b);
+  //noLoop();
   
   float xOld = curve2.cPoints[1].x;
   yOld = curve2.cPoints[1].y;
@@ -78,7 +82,7 @@ void c1(CurveI curve1, CurveI curve2) {
   while (abs(intensityV1 - intensityV2) > c1IActualError || distV1V2 < 30) {
     curve2.cPoints[1].x += 1;
     curve2.cPoints[1].y = a*curve2.cPoints[1].x + b;
-    intensityV2 = sqrt(sq(curve2.cPoints[0].x-curve2.cPoints[1].x)+ sq(curve2.cPoints[0].y-curve2.cPoints[1].y));
+    intensityV2 = sqrt(sq(curve2.getX(0) - curve2.getX(0+globalH)) + sq(curve2.getY(0) - curve2.getY(0+globalH)));
     distV1V2 = sqrt(sq(curve1.cPoints[curve1.cPoints.length-2].x-curve2.cPoints[1].x) + sq(curve1.cPoints[curve1.cPoints.length-2].y-curve2.cPoints[1].y));
 
     if (curve2.cPoints[1].x > 1000) {
@@ -105,12 +109,19 @@ void c1(CurveI curve1, CurveI curve2) {
 }
 
 void c2(CurveI curve1, CurveI curve2) {
-  c1(curve1, curve2);
+  //c1(curve1, curve2);
   //TODO don't use x0-h and 0+h
   println("-----Start c2-----");
   float d2C1 = curve1.secondDerivative(float(curve1.n-curve1.k+2)-globalH*2, globalH);
   float d2C2 = curve2.secondDerivative(0+globalH*2, globalH);
   println("Curve 1 second derivative:"+d2C1);
   println("Curve 2 second derivative:"+d2C2);
+    float intensityV1 = sqrt(sq(curve1.getX(curve1.n-curve1.k+2) - curve1.getX(curve1.n-curve1.k+2-globalH))//
+  + sq(curve1.getY(curve1.n-curve1.k+2) - curve1.getY(curve1.n-curve1.k+2-globalH)));
+  
+  float intensityV2 = sqrt(sq(curve2.getX(0) - curve2.getX(0+globalH))//
+  + sq(curve2.getY(0) - curve2.getY(0+globalH)));
+  println("Curve 1 intensity:"+intensityV1);
+  println("Curve 2 intensity:"+intensityV2);
   println("-----Finish c2-----");
 }
